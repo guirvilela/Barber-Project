@@ -1,0 +1,20 @@
+@mixin input {
+    input {
+        height: 45px;
+        padding: 0 12px;
+        border-radius: 5px;
+        width: 100%;
+        border: none;
+        border: 1px solid #cccccc;
+        background: none;
+        color: $black;
+        font-size: 16px;
+
+        &::placeholder {
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 27px;
+            color: #9ea1a6;
+        }
+    }
+}
