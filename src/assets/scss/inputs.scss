@@ -16,5 +16,29 @@
             line-height: 27px;
             color: #9ea1a6;
         }
+
+
+    }
+
+    p {
+        top: 17.5px;
+        right: -160px;
+        color: $brown;
+        font-size: 14px;
+        position: absolute;
+        transition: all 500ms ease-in-out;
+        animation: feedback 500ms ease;
+    }
+
+    @keyframes feedback {
+        from {
+            top: 70px;
+            opacity: 0;
+        }
+
+        to {
+            top: 12px;
+            opacity: 1;
+        }
     }
 }

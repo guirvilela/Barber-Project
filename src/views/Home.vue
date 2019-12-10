@@ -2,7 +2,7 @@
   <div>
     <Header />
     <div class="home">
-      <h1>HOME</h1>
+      <h1>Garanta seu corte sem sair de casa</h1>
     </div>
   </div>
 </template>
@@ -12,7 +12,7 @@ export default {
   name: 'home',
   components: {
     Header: () => import('@/views/Header.vue'),
-    Login: () => import('@/components/Home/UserLogin/Login.vue'),
+    Login: () => import('@/components/HandleUser/UserLogin/Login.vue'),
   },
 };
 </script>

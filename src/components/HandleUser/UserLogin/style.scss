@@ -1,6 +1,12 @@
 @import '@/assets/scss/index.scss';
 
 .login {
+    a {
+        color: $brown;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
     h1 {
         border: 1px solid $brown;
         width: 100%;
@@ -8,6 +14,12 @@
         padding: 10px;
         border-radius: 5px 5px 0 0;
         border-bottom: none;
+        min-width: 350px;
+        max-width: 350px;
+        color: $black;
+        font-weight: 500;
+        font-size: 24px;
+        text-transform: capitalize;
 
     }
 
@@ -15,7 +27,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: calc(100vh - 71px);
 
     .fields {
         border: 1px solid $brown;
@@ -26,6 +38,10 @@
     .inputs {
         @include input;
 
+        .field-digit {
+            position: relative;
+        }
+
         input {
             margin: 10px 0;
             margin-top: 5px;
@@ -34,15 +50,15 @@
 
     }
 
-    .send {
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 15px;
 
-        button {
-            @include button;
-        }
+}
+
+.send {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+
+    button {
+        @include button;
     }
-
-
 }

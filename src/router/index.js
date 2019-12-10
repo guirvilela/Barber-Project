@@ -12,7 +12,7 @@ const routes = [{
   {
     path: '/fazer-login',
     name: 'login',
-    component: () => import('@/components/Home/UserLogin/Login.vue')
+    component: () => import('@/components/HandleUser/HandleUser.vue')
   }
 
 ]
