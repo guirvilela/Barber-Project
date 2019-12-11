@@ -12,7 +12,7 @@ export default new Vuex.Store({
   },
   plugins: [
     createPersistedState({
-      key: "@user",
+      key: "@Barber:user",
       paths: ["user.userStore"]
     })
   ],

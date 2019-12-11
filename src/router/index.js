@@ -1,24 +1,29 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
+import * as Cookies from "js-cookie";
+import Routers from "./routers";
 
-Vue.use(VueRouter)
+Vue.use(Router);
 
-const routes = [{
-    path: '/',
-    name: 'home',
-    component: () => import('@/views/Home/Home.vue')
+const router = new Router({
+  mode: "history",
+  base: process.env.BASE_URL,
+  routes: [...Routers],
 
-  },
-  {
-    path: '/fazer-login',
-    name: 'login',
-    component: () => import('@/views/User/HandleUser.vue')
+});
+
+router.beforeEach((to, from, next) => {
+  if (
+    Cookies.get("@Auth:user") != "true" &&
+    (to.name.split("-")[0] == "user" || to.name.split("-")[0] == "client")
+  ) {
+    next({
+      path: "/"
+    });
+    document.body.style.overflow = "auto";
+  } else {
+    next();
   }
+});
 
-]
-
-const router = new VueRouter({
-  routes
-})
-
-export default router
+export default router;

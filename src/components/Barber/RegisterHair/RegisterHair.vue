@@ -58,20 +58,25 @@
           <div class="send">
             <a @click.prevent="$parent.Components(4)">Cancelar</a>
             <button
-              @click.prevent="$v.$invalid ? $v.$touch() : $parent.Components(5)"
+              @click.prevent="
+                $v.$invalid
+                  ? $v.$touch()
+                  : $router.push({ path: '/perfil-babearia' })
+              "
             >
               Cadastrar
             </button>
           </div>
         </form>
       </div>
+      {{ selectedFile }}
     </div>
   </div>
 </template>
 <script>
 import { required } from 'vuelidate/lib/validators';
 import { mask } from 'vue-the-mask';
-import axios from 'axios';
+import axios from '@/services/api.js';
 export default {
   name: 'login',
 
@@ -133,19 +138,7 @@ export default {
     name: { required },
   },
 
-  created() {
-    console.log(this.check);
-  },
   methods: {
-    async SearchCep() {
-      this.$viaCep.buscarCep(`${this.cep}`).then(res => {
-        this.location = res.logradouro;
-        this.district = res.bairro;
-        this.city = res.localidade;
-        this.uf = res.uf;
-      });
-    },
-
     async fileSelect(event) {
       let formData = new FormData();
 
@@ -173,6 +166,7 @@ export default {
       // }
     },
     async deletePhoto() {
+      this.selectedFile = '';
       // const token = await CurrentToken.init();
       // const header = {
       //   headers: {

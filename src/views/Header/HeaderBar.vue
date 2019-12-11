@@ -3,28 +3,53 @@
     <div>
       <h2 @click.prevent="$router.push({ path: '/' })">Barbearia</h2>
     </div>
-    <div>
-      <button
-        @click.prevent="$router.push({ path: '/fazer-login' })"
-        v-if="buttonLogin"
-      >
-        Fazer Login
-      </button>
-    </div>
+    <component :is="componentId"></component>
   </div>
 </template>
 <script>
+import * as Cookie from 'js-cookie';
+import { mapActions } from 'vuex';
 export default {
   name: 'header-bar',
+  components: {
+    Logged: () => import('@/components/Header/Logged/Logged.vue'),
+    NotLogged: () => import('@/components/Header/NotLogged/NotLogged.vue'),
+  },
   data: () => ({
     buttonLogin: true,
+    log: false,
   }),
   created() {
-    if (this.$router.history.current.name == 'login') {
-      this.buttonLogin = false;
+    const auth = Cookie.get('@Auth:user');
+    switch (auth) {
+      case 'true':
+        this.componentId = 'Logged';
+        break;
+      default:
+        this.componentId = 'NotLogged';
+        break;
     }
   },
-  methods: {},
+  computed: {
+    user() {
+      return this.$store.state.user.userStore.name;
+    },
+  },
+  methods: {
+    ...mapActions({
+      destroySession: 'user/destroy',
+    }),
+    destroy() {
+      this.destroySession({
+        data: {},
+        callback: () => {
+          this.$router.go({
+            path: '/',
+          });
+        },
+      });
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

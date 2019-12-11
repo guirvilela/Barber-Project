@@ -73,7 +73,6 @@
           </div>
 
           <div class="send">
-            <a @click.prevent="$parent.Components(3)">Cancelar</a>
             <button
               @click.prevent="$v.$invalid ? $v.$touch() : $parent.Components(5)"
             >
@@ -88,7 +87,7 @@
 <script>
 import { required } from 'vuelidate/lib/validators';
 import { mask } from 'vue-the-mask';
-import axios from 'axios';
+import axios from '@/services/api.js';
 export default {
   name: 'login',
 

@@ -1,4 +1,4 @@
-import axios from "./api";
+import axios from '@/services/api.js';
 import * as Cookies from "js-cookie";
 
 class CurrentToken {

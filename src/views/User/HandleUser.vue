@@ -9,7 +9,6 @@ export default {
   props: ['active'],
   components: {
     Header: () => import('@/views/Header/HeaderBar.vue'),
-    Types: () => import('@/components/HandleUser/Types/Types.vue'),
     CreateAccount: () =>
       import('@/components/HandleUser/CreateAccount/CreateAccount.vue'),
     Login: () => import('@/components/HandleUser/UserLogin/Login.vue'),
@@ -35,12 +34,13 @@ export default {
         case 2:
           return (this.componentId = 'CreateAccount');
           break;
-        case 3:
-          return (this.componentId = 'Types');
+
         case 4:
           return (this.componentId = 'Register');
+          break;
         case 5:
           return (this.componentId = 'RegisterHair');
+          break;
       }
     },
   },

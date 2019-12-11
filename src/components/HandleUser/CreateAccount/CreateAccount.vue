@@ -25,7 +25,7 @@
                     <label for="pass">Senha</label>
                     <div style='position: relative'>
                     <input type="password" id='pass' v-model='pass'>
-                     <p v-if='$v.pass.$error' >Campo Obrigatório</p>
+                     <p v-if='$v.pass.$error' >{{pass == '' ? 'Campo Obrigatório' : 'Senha com pelo menos 6 caracteres'}}</p>
                     </div>
                 </div>
 
@@ -35,6 +35,10 @@
                     <input type="password" id='confirm' v-model='confirm'>
                      <p v-if='$v.confirm.$error' >{{confirm == '' ? 'Campo Obrigatório' : 'Senhas diferente'}}</p>
                     </div>
+                </div>
+
+                <div class='imbarber'>
+                    <input type="checkbox" v-model='barber'> <span>Tenho minha barbearia</span>
                 </div>
 
                  <p style='margin-top: 10px'>Já tenho uma conta <a @click.prevent='$parent.Components(1)' >Fazer login</a></p>
@@ -49,9 +53,10 @@
 </div>
 </template>
 <script>
-import axios from 'axios';
+import axios from '@/services/api.js';
 import { required, email, sameAs } from "vuelidate/lib/validators";
 import { mapActions, mapMutations } from "vuex";
+import * as Cookies from "js-cookie";
 export default {
     
     name: 'login',
@@ -61,6 +66,7 @@ export default {
         email: '',
         pass: '',
         confirm: '',
+        barber: false,
     }),
    
    validations:{
@@ -69,21 +75,27 @@ export default {
        pass: {required},
        confirm: {required,sameAs: sameAs('pass')}
    },
-
+  
    methods: {
        ...mapActions({
       store: "user/store"
     }),
        async createAccount(){
-            
             await this.store({
-                data:{
+                data: {
                 name: this.name,
                 email:this.email,
-                password: this.pass
+                password: this.pass,
+                barber: this.barber
                 },
                  callback: () => {
-            this.$parent.Components(3);
+                if(this.barber == true){
+                    this.$parent.Components(4)
+                }else{
+                    this.$router.push({
+                        name: 'client-profile'
+                    })
+                }
           }
             });
         }
