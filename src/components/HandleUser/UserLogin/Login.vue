@@ -1,6 +1,6 @@
 <template>
   <div class='login'>
-    <div>
+    <div class='login-user'>
         <h1>Login</h1>
 
         <div class='all'>
@@ -17,7 +17,7 @@
                     <label for="pass">Senha</label>
                     
                     <div class='field-digit'>
-                    <input type="text" id='pass' v-model='pass' @focus='$v.pass.$reset()'>
+                    <input type="password" id='pass' v-model='pass' @focus='$v.pass.$reset()'>
                     <p v-if='$v.pass.$error'>Campo Obrigatório</p>
                     </div>
                 </div>

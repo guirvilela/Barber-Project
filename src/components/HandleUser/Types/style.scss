@@ -44,4 +44,10 @@
     .prop:last-child {
         padding: 0 3px;
     }
+
+    .prop {
+        p {
+            color: $black
+        }
+    }
 }

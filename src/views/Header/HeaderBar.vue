@@ -15,7 +15,7 @@
 </template>
 <script>
 export default {
-  name: 'header',
+  name: 'header-bar',
   data: () => ({
     buttonLogin: true,
   }),

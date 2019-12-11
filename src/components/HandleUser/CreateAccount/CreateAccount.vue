@@ -1,6 +1,6 @@
 <template>
   <div class='login'>
-    <div>
+    <div class='create'>
         <h1>Criar Conta</h1>
 
         <div class='all'>
@@ -12,6 +12,7 @@
                     <p v-if='$v.name.$error'>Campo Obrigatório</p>
                     </div>
                 </div>
+
                 <div class='inputs'>
                     <label for="email">Email</label>
                     <div style='position: relative'>
@@ -19,6 +20,7 @@
                      <p v-if='$v.email.$error'>{{email == '' ? 'Campo Obrigatório' : 'Email inválido'}}</p>
                     </div>
                 </div>
+
                 <div class='inputs'>
                     <label for="pass">Senha</label>
                     <div style='position: relative'>
@@ -26,6 +28,7 @@
                      <p v-if='$v.pass.$error' >Campo Obrigatório</p>
                     </div>
                 </div>
+
                 <div class='inputs'>
                     <label for="confirm">Confirmar Senha</label>
                     <div style='position: relative'>
@@ -33,10 +36,11 @@
                      <p v-if='$v.confirm.$error' >{{confirm == '' ? 'Campo Obrigatório' : 'Senhas diferente'}}</p>
                     </div>
                 </div>
-                 <p>Já tenho uma conta <a @click.prevent='$parent.Components(1)'>Fazer login</a></p>
+
+                 <p style='margin-top: 10px'>Já tenho uma conta <a @click.prevent='$parent.Components(1)' >Fazer login</a></p>
                 <div class='send'>
                     <a class='cancelBtn' @click.prevent='$parent.Components(1)'>Cancelar</a>
-                <button @click.prevent='$v.$invalid ? $v.$touch() : $parent.Components(3)' >Cadastrar</button>
+                <button @click.prevent='$v.$invalid ? $v.$touch() : createAccount()' >Cadastrar</button>
                
                 </div>
             </form>
@@ -45,7 +49,9 @@
 </div>
 </template>
 <script>
+import axios from 'axios';
 import { required, email, sameAs } from "vuelidate/lib/validators";
+import { mapActions, mapMutations } from "vuex";
 export default {
     
     name: 'login',
@@ -62,7 +68,26 @@ export default {
        email: {required, email},
        pass: {required},
        confirm: {required,sameAs: sameAs('pass')}
-   }
+   },
+
+   methods: {
+       ...mapActions({
+      store: "user/store"
+    }),
+       async createAccount(){
+            
+            await this.store({
+                data:{
+                name: this.name,
+                email:this.email,
+                password: this.pass
+                },
+                 callback: () => {
+            this.$parent.Components(3);
+          }
+            });
+        }
+   },
 
     
 

@@ -6,13 +6,13 @@ Vue.use(VueRouter)
 const routes = [{
     path: '/',
     name: 'home',
-    component: () => import('@/views/Home.vue')
+    component: () => import('@/views/Home/Home.vue')
 
   },
   {
     path: '/fazer-login',
     name: 'login',
-    component: () => import('@/components/HandleUser/HandleUser.vue')
+    component: () => import('@/views/User/HandleUser.vue')
   }
 
 ]

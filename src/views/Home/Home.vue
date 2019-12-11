@@ -8,11 +8,12 @@
 </template>
 
 <script>
+import * as Cookies from 'js-cookie';
 export default {
   name: 'home',
   components: {
-    Header: () => import('@/views/Header.vue'),
-    Login: () => import('@/components/HandleUser/UserLogin/Login.vue'),
+    Header: () => import('@/views/Header/HeaderBar.vue'),
+    Login: () => import('@/views/User/HandleUser.vue'),
   },
 };
 </script>
