@@ -34,13 +34,6 @@ export default {
         case 2:
           return (this.componentId = 'CreateAccount');
           break;
-
-        case 4:
-          return (this.componentId = 'Register');
-          break;
-        case 5:
-          return (this.componentId = 'RegisterHair');
-          break;
       }
     },
   },

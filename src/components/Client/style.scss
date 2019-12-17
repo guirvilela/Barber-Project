@@ -14,6 +14,7 @@
     display: flex;
     justify-content: space-around;
     margin-top: 63px;
+    padding: 30px;
 
     h2 {
         color: $black;
@@ -33,28 +34,22 @@
 
 }
 
-.field-barber {
+.config-data {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    align-items: center;
-
-    button {
-        max-width: 300px;
-        width: 300px;
-        margin-top: 20px;
-        @include button
-    }
-}
-
-.config {
-    display: flex;
-    justify-content: flex-end;
-    padding: 0 30px;
+    justify-content: space-around;
 
     a {
         text-decoration: none;
         font-size: 18px;
+        padding: 10px;
+        border-radius: 5px 5px 0 0;
+        width: 100%;
+        text-align: center;
+
+        &.router-link-active {
+            background: #d2691e38;
+        }
     }
+
+
 }

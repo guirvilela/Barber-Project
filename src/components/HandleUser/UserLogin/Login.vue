@@ -62,7 +62,8 @@ export default {
         return this.$store.state.user.userStore.barber
     }
   },
- 
+  created(){
+  },
     methods: {
         ...mapActions({
       login: "user/login"
@@ -75,9 +76,9 @@ export default {
                 password:this.pass,
             },
             callback:() => {
-                this.$router.go({
-                name: 'home',
-        });
+              this.$router.push({
+                path: '/dfgd'
+              })
                
             }
         })

@@ -36,8 +36,7 @@ export default {
       this.destroySession({
         data: {},
         callback: () => {
-          this.setPlan(null);
-          this.$router.go({
+          this.$router.push({
             path: '/',
           });
         },
@@ -47,11 +46,11 @@ export default {
     isbarber() {
       if (this.Barber == true) {
         this.$router.push({
-          path: '/perfil-barbearia',
+          path: '/criar-barbearia',
         });
       } else {
         this.$router.push({
-          path: '/perfil-client',
+          path: '/perfil-cliente/dados-pessoais',
         });
       }
     },

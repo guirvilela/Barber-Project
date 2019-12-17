@@ -1,6 +1,9 @@
 <template>
   <div class="list-actions">
-    <button @click.prevent="$router.push({ path: '/fazer-login' })">
+    <button
+      @click.prevent="$router.push({ path: '/fazer-login' })"
+      v-if="$route.name != 'login'"
+    >
       Fazer Login
     </button>
   </div>

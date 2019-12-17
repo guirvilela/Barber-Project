@@ -5,7 +5,9 @@ import store from './store';
 import Vuelidate from 'vuelidate';
 import ViaCep from 'vue-viacep';
 import VueTheMask from 'vue-the-mask';
+import VueDateFns from "vue-date-fns";
 
+Vue.use(VueDateFns);
 Vue.use(VueTheMask);
 Vue.use(ViaCep);
 Vue.use(Vuelidate);
