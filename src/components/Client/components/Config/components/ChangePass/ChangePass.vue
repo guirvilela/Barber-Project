@@ -20,6 +20,7 @@
       </p>
       <p v-if="incorrectPass">Senha incorreta</p>
       <p v-if="passEquals">Senhas são iguais</p>
+      <span v-if="success">Senha Alterada com sucesso</span>
     </div>
     <div style="position: relative">
       <input
@@ -63,6 +64,7 @@ export default {
     confirm: '',
     incorrectPass: false,
     passEquals: false,
+    success: false,
   }),
 
   validations: {
@@ -86,7 +88,10 @@ export default {
           },
         };
         const res = await axios.put('/user/password', data, header);
-        console.log(res);
+        (this.success = true),
+          setTimeout(() => {
+            this.success = false;
+          }, 3000);
       } catch (err) {
         if (this.atualPass === this.pass) {
           this.passEquals = true;

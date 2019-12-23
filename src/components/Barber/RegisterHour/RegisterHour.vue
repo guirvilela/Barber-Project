@@ -4,16 +4,27 @@
     <div class="login">
       <div class="hair">
         <h1>
-          Adicione o Barbeiro
+          Adicione os Horários
         </h1>
 
         <div class="all">
           <form class="fields" autocomplete="off">
             <div class="inputs">
-              <label for="name">Nome</label>
+              <label for="hour">Data / Horário</label>
               <div style="position: relative" class="field-name">
-                <input type="text" id="name" v-model="name" />
-                <p v-if="$v.name.$error">Campo Obrigatório</p>
+                <input
+                  type="text"
+                  id="hour"
+                  v-model="hour"
+                  placeholder="Exemplo: 2019-12-24 09:40"
+                  @focus="$v.hour.$reset()"
+                />
+
+                <p v-if="$v.hour.$error">Campo Obrigatório</p>
+                <p v-if="invalid">Formato Inválido</p>
+              </div>
+              <div class="example">
+                <h3>Exemplo: 2019-12-24 09:40</h3>
               </div>
             </div>
 
@@ -22,9 +33,9 @@
                 >Cancelar</a
               >
               <button
-                @click.prevent="$v.$invalid ? $v.$touch() : registerHair()"
+                @click.prevent="$v.$invalid ? $v.$touch() : registerHour()"
               >
-                Cadastrar
+                Adicionar
               </button>
             </div>
           </form>
@@ -45,19 +56,20 @@ export default {
   },
 
   data: () => ({
+    invalid: false,
     event: {
       delete: false,
     },
     selectedFile: '',
-    name: '',
+    hour: '',
   }),
 
   validations: {
-    name: { required },
+    hour: { required },
   },
 
   methods: {
-    async registerHair() {
+    async registerHour() {
       try {
         const token = await CurrentToken.init();
 
@@ -67,15 +79,17 @@ export default {
           },
         };
 
-        const res = await axios.post(
-          '/hairdresser',
-          { name: this.name },
-          header,
-        );
+        const res = await axios.post('/schedule', { date: this.hour }, header);
 
         this.$router.push({ path: '/perfil-barbearia' });
       } catch (err) {
-        console.log(err);
+        console.log(err.response);
+        if (err.response.data.message.match(/invalid/)) {
+          this.invalid = true;
+          setTimeout(() => {
+            this.invalid = false;
+          }, 3000);
+        }
       }
     },
   },

@@ -14,7 +14,7 @@ class CurrentToken {
             const res = await axios.put("/auth", {
                 refresh_token: token
             });
-            console.log("ATUALIZOU: ", res);
+
             Cookies.set("@Access:token", res.data.user.access_token, {
                 expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000)
             });

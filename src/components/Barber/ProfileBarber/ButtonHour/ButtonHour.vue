@@ -2,9 +2,13 @@
   <div class="btn-barber">
     <div class="barber-field">
       <div class="name">
-        <h3>{{ name }}</h3>
+        <h3>
+          {{ hour.date.split(' ')[1] }}
+
+          {{ hour.date.split(' ')[0] }}
+        </h3>
         <!-- <h4>{{ prop.hour }}</h4> -->
-        <span @click.prevent="removeHair(index)">&times;</span>
+        <span @click.prevent="removeHour()">&times;</span>
       </div>
     </div>
   </div>
@@ -12,11 +16,15 @@
 <script>
 import axios from '@/services/api.js';
 import CurrentToken from '@/services/CurrentToken.js';
+import format from 'date-fns/format';
 export default {
-  props: ['name'],
+  props: ['hour'],
+  data: () => ({
+    horario: '',
+  }),
 
   methods: {
-    async removeHair(index) {
+    async removeHour(index) {
       try {
         const token = await CurrentToken.init();
 
@@ -25,12 +33,9 @@ export default {
             Authorization: 'Bearer ' + token,
           },
         };
-        const res = await axios.delete(
-          `/hairdresser/${this.$parent.idHair}`,
-          header,
-
-          this.$parent.names.splice(index, 1),
-        );
+        const res = await axios.delete(`/schedule/${this.hour.id}`, header);
+        this.$parent.hours.splice(index, 1);
+        console.log(res);
       } catch (err) {
         console.log(err);
       }

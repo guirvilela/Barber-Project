@@ -11,7 +11,8 @@ export default [{
         component: () => import('@/views/Home/Home.vue'),
         meta: {
             requeresAuth: true
-        }
+        },
+
 
     },
     {
@@ -39,11 +40,6 @@ export default [{
         component: () => import('@/components/HistoryClient/HistoryClient.vue')
     },
     {
-        path: '/criar-barbearia',
-        name: 'before-create',
-        component: () => import('@/components/Barber/BeforeCreate/BeforeCreate.vue')
-    },
-    {
         path: '/cadastrar-barbearia',
         name: 'barber-register',
         component: () => import('@/components/Barber/RegisterBarber/RegisterBarber.vue')
@@ -52,6 +48,11 @@ export default [{
         path: '/cadastro-barbeiro',
         name: 'barber-create',
         component: () => import('@/components/Barber/RegisterHair/RegisterHair.vue')
+    },
+    {
+        path: '/cadastro-horario',
+        name: 'barber-hour',
+        component: () => import('@/components/Barber/RegisterHour/RegisterHour.vue')
     },
     {
         path: '/perfil-cliente',

@@ -145,6 +145,7 @@ export default {
           number: this.number,
           city: this.city,
           zip: this.cep,
+          state: this.uf,
         },
         callback: () => {
           this.$router.push({

@@ -28,7 +28,8 @@
               <input type="password" id="pass" v-model="pass" />
               <p
                 v-if="$v.pass.$error"
-              >{{pass == '' ? 'Campo Obrigatório' : 'Senha com pelo menos 6 caracteres'}}</p>
+              >Campo Obrigatório </p>
+              <p v-if='maxpass'> Mínimo 6 caracteres</p>
             </div>
           </div>
 
@@ -74,7 +75,8 @@ export default {
     pass: "",
     confirm: "",
     alreadyExist: false,
-    barber: false
+    barber: false,
+    maxpass: false,
   }),
 
   validations: {
@@ -108,7 +110,7 @@ export default {
         callback: () => {
             if(this.hairBarber == 1){
               this.$router.push({
-                path: '/perfil-barbearia'
+                path: '/cadastrar-barbearia'
               })
             }else{
               this.$router.push({
@@ -121,6 +123,7 @@ export default {
       this.error();
     },
     error() {
+      console.log(this.errorRequest)
       if (
         this.errorRequest.email !== undefined &&
         this.errorRequest.email[0].match(/email/)
@@ -130,6 +133,13 @@ export default {
           this.alreadyExist = false;
         }, 5000);
       }
+      if(this.errorRequest.password !== undefined &&
+        this.errorRequest.password[0].match(/password/)){
+          this.maxpass = true;
+          setTimeout(() => {
+            this.maxpass = false;
+          },4000)
+        }
     }
   }
 };

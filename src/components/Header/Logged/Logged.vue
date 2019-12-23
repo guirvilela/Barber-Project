@@ -2,7 +2,9 @@
   <div class="list-actions">
     <ul>
       <li>
-        <button @click.prevent="isbarber()">{{ user }}</button>
+        <button @click.prevent="isbarber()" style="text-transform: capitalize">
+          {{ user }}
+        </button>
       </li>
       <li>
         <button @click.prevent="destroy()">Sair</button>
@@ -46,7 +48,7 @@ export default {
     isbarber() {
       if (this.Barber == true) {
         this.$router.push({
-          path: '/criar-barbearia',
+          path: '/perfil-barbearia',
         });
       } else {
         this.$router.push({

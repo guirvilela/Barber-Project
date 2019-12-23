@@ -5,7 +5,36 @@
     <div class="title">
       <h1>Configurações da sua Barbearia</h1>
     </div>
-
+    <div class="add-photo">
+      <div class="add-text">
+        <h2>Adicionar uma foto para sua Barbearia</h2>
+      </div>
+      <div class="upload">
+        <img
+          v-if="selectedFile == '' || selectedFile == null"
+          :src="require('@/assets/images/profile.png')"
+          alt="Foto perfil"
+          width="60"
+        />
+        <img
+          v-else
+          :src="selectedFile.replace('localhost:8000', '192.168.15.12:8000')"
+          alt="Foto de perfil"
+          class="photo-profile"
+        />
+        <label for="p-upload" @change="fileSelect">
+          <input type="file" id="p-upload" style="display: none;" />
+          <div class="add-photo">Add</div>
+        </label>
+        <!-- <p
+        class="delete-photo-client"
+        v-if="selectedFile != null"
+        @click.prevent="deletePhoto()"
+      >
+        Excluir Foto
+      </p> -->
+      </div>
+    </div>
     <div class="informations">
       <div class="data-info">
         <div class="data">
@@ -105,6 +134,7 @@
 import axios from '@/services/api.js';
 import CurrentToken from '@/services/CurrentToken.js';
 import { mask } from 'vue-the-mask';
+import { mapActions, mapMutations } from 'vuex';
 export default {
   props: ['prop'],
   name: 'profile-barber',
@@ -114,6 +144,14 @@ export default {
   data: () => ({
     salved: false,
     name: '',
+    selectedFile: '',
+    name: '',
+    cep: '',
+    district: '',
+    street: '',
+    number: '',
+    city: '',
+    idBarber: '',
 
     property: {
       name: true,
@@ -124,15 +162,94 @@ export default {
       city: true,
     },
   }),
-  created() {
-    this.GetBarber();
-  },
   computed: {
-    id() {
-      return this.$store.state.user.barber.id;
+    idUser() {
+      return this.$store.state.user.userStore.id;
     },
   },
+  created() {
+    this.getBarberLogin();
+  },
+
   methods: {
+    ...mapMutations({
+      setLogo: 'user/SET_LOGO',
+    }),
+    ...mapActions({
+      destroySession: 'user/destroy',
+    }),
+
+    async getBarberLogin() {
+      try {
+        const token = await CurrentToken.init();
+
+        const header = {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          },
+        };
+        const res = await axios.get(`user/${this.idUser}`, header);
+        this.idBarber = res.data.barber.id;
+
+        this.GetBarber();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async GetBarber() {
+      try {
+        const token = await CurrentToken.init();
+
+        const header = {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          },
+        };
+        const res = await axios.get(`/barber/${this.idBarber}`, header);
+
+        this.selectedFile = res.data.barber.logo;
+        this.name = res.data.barber.name;
+        this.street = res.data.barber.street;
+        this.district = res.data.barber.district;
+        this.number = res.data.barber.number;
+        this.cep = res.data.barber.zip;
+        this.city = res.data.barber.city;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async fileSelect(event) {
+      let formData = new FormData();
+      setTimeout(() => {
+        this.selectedFile = URL.createObjectURL(event.target.files[0]);
+      }, 400);
+
+      formData.append('logo', event.target.files[0]);
+
+      const token = await CurrentToken.init();
+
+      const header = {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      };
+
+      try {
+        const res = await axios.post(
+          `barber/update/${this.idBarber}`,
+          formData,
+          header,
+        );
+        this.setLogo(res.data.barber.logo);
+        this.$store.state.user.barber.logo = this.selectedFile.replace(
+          'localhost:8000',
+          '192.168.15.12:8000',
+        );
+      } catch (err) {
+        console.log('Não Deu', err);
+      }
+    },
     async DeleteBarber() {
       try {
         const token = await CurrentToken.init();
@@ -141,14 +258,21 @@ export default {
             Authorization: 'Bearer ' + token,
           },
         };
-        const res = await axios.delete(`barber/${this.id}`, header);
-        console.log(res);
-        this.$router.push({
-          path: '/criar-barbearia',
-        });
+        const res = await axios.delete(`barber/${this.idBarber}`, header);
+        this.destroy();
       } catch (err) {
         console.log(err);
       }
+    },
+    destroy() {
+      this.destroySession({
+        data: {},
+        callback: () => {
+          this.$router.push({
+            path: '/fazer-login',
+          });
+        },
+      });
     },
     async SearchCep() {
       this.$viaCep.buscarCep(`${this.cep}`).then(res => {
@@ -159,6 +283,7 @@ export default {
     },
     async changeData() {
       const data = {
+        logo: this.selectedFile,
         name: this.name,
         street: this.street,
         district: this.district,
@@ -174,33 +299,16 @@ export default {
         },
       };
       try {
-        const res = await axios.post(`barber/update/${this.id}`, data, header);
-        console.log(res);
+        const res = await axios.post(
+          `barber/update/${this.idBarber}`,
+          data,
+          header,
+        );
+
         this.salved = true;
         setTimeout(() => {
           this.salved = false;
         }, 3000);
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    async GetBarber() {
-      try {
-        const token = await CurrentToken.init();
-
-        const header = {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
-        };
-        const res = await axios.get(`/barber/${this.id}`, header);
-        console.log(res);
-        this.name = res.data.barber.name;
-        this.street = res.data.barber.street;
-        this.district = res.data.barber.district;
-        this.number = res.data.barber.number;
-        this.cep = res.data.barber.zip;
-        this.city = res.data.barber.city;
       } catch (err) {
         console.log(err);
       }
@@ -223,7 +331,6 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 100px;
   height: 34vh;
   .data-info {
     display: flex;
@@ -266,5 +373,75 @@ export default {
   justify-content: center;
   width: 100%;
   margin-top: 30px;
+  button {
+    @include button;
+  }
+}
+.add-photo {
+  .add-text {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+  }
+}
+.upload {
+  margin: 20px auto;
+  align-self: center;
+  width: 110px;
+  height: 110px;
+  background: white;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img.photo-profile {
+    object-fit: contain;
+    width: 100%;
+    border-radius: 50%;
+    height: 100%;
+  }
+
+  label[for='p-upload'] {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
+
+    img {
+      width: 38px;
+      object-fit: cover;
+    }
+  }
+
+  .spinn-delete {
+    position: absolute;
+    top: 57px;
+    left: 57px;
+    opacity: 100% !important;
+  }
+
+  .delete-photo-client {
+    position: absolute;
+    bottom: -35px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .add-photo {
+    background: blue;
+    border-radius: 50%;
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 1px 2px 4px #2e97ff73;
+  }
 }
 </style>

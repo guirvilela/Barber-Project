@@ -9,7 +9,7 @@
       />
       <img
         v-else
-        :src="selectedFile.replace('localhost:8000', '192.168.15.12')"
+        :src="selectedFile.replace('localhost:8000', '192.168.15.12:8000')"
         alt="Foto de perfil"
         class="photo-profile"
       />
@@ -27,7 +27,7 @@
     </div>
     <div class="date total">
       <h3>Sua conta foi criada dia:</h3>
-      <span>{{ $date(new Date(), 'DD/MM/YYYY') | createdAt }}</span>
+      <span>{{ createdAt }}</span>
     </div>
     <div class="name total">
       <h3>Nome:</h3>
@@ -45,6 +45,7 @@ import CurrentToken from '@/services/CurrentToken.js';
 import * as Cookies from 'js-cookie';
 import { dateFilter } from 'vue-date-fns';
 import { mapMutations } from 'vuex';
+import format from 'date-fns/format';
 export default {
   name: 'data-client',
 
@@ -68,7 +69,13 @@ export default {
     ...mapMutations({
       setAvatar: 'user/SET_AVATAR',
     }),
+    formatDate() {
+      const Years = new Date(this.createdAt.split(' ')[0].replace(/\D/g, ','));
+      const formattedDate = format(Years, 'DD/MM/YYYY');
 
+      this.createdAt = formattedDate;
+      console.log(this.createdAt);
+    },
     async GetUser() {
       try {
         const token = await CurrentToken.init();
@@ -83,7 +90,7 @@ export default {
         this.userEmail = res.data.user.email;
         this.createdAt = res.data.user.created_at;
         this.selectedFile = res.data.user.avatar;
-        console.log('PUXOU', res);
+        this.formatDate();
       } catch (err) {
         console.log(err);
       }
@@ -108,8 +115,10 @@ export default {
       try {
         const res = await axios.post('/user/update', formData, header);
         this.setAvatar(res.data.user.avatar);
-        this.$store.state.user.userStore.avatar = this.selectedFile;
-        console.log('DEU', res);
+        this.$store.state.user.userStore.avatar = this.selectedFile.replace(
+          'localhost:8000',
+          '192.168.15.12',
+        );
       } catch (err) {
         console.log('Não Deu', err);
       }
@@ -124,6 +133,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  width: 100%;
 
   .total {
     display: flex;

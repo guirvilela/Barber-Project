@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%; border-bottom: 1px solid #c4c4c4;">
+  <div class="config">
     <div class="personal-data">
       <div class="name total">
         <h3>Nome e Email:</h3>
@@ -75,7 +75,7 @@ export default {
           },
         };
         const res = await axios.delete('/user', header);
-        console.log(res);
+
         this.destroy();
       } catch (err) {
         console.log(err);
@@ -94,8 +94,15 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/assets/scss/index.scss';
+.config {
+  height: 167px;
+  max-height: 167px;
+  height: 100%;
+  border-bottom: 1px solid #c4c4c4;
+  margin-top: 10px;
+}
 .personal-data {
   padding: 0 30px;
   height: 100%;
